@@ -89,6 +89,10 @@ fsize <- 36
 psize <- 9
 lsize <- 3
 
+#Predictions
+tdate <- 57 #Last day
+predcases <- trunc(fModel(tdate, a=qa, b=qb, c=qc))
+
 qp1 <- ggplot(sdata, aes(x=X, y=Y))
 #qp1 <- ggplot(pdata, aes(x=date, y=cases))
 qp1 <- qp1 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
@@ -102,10 +106,10 @@ qp1 <- qp1 + xlab(expression("Extrapolation to 3/19/20")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
 qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"                 Data source: Johns Hopkins University Center for Systems Science \n and Engineering (JHU CSSE)"))
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=1, margin=margin(16,0,0,0)))
-qp1 <- qp1 + expand_limits(x=c(0,57))
+qp1 <- qp1 + expand_limits(x=c(0,tdate))
 qp1 <- qp1 + scale_x_continuous(breaks=NULL)
 qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
-qp1 <- qp1 + annotate("text", label = "13245 -", x = 50, y = 13300, size=fsize*0.25)
+qp1 <- qp1 + annotate("text", label = paste(c(predcases," -"), collapse = ""), x = tdate-7, y = predcases, size=fsize*0.25)
 
 
 # qp2 <- ggplot(odata, aes(x=date, y=cases))
