@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/12/2020
+#Last updated 3/14/2020
 
 #Clear plot window
 graphics.off()
@@ -18,7 +18,7 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Italy"
+country <- "Austria"
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"), col_types = cols())
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"), col_types = cols())
@@ -91,5 +91,6 @@ qp2 <- qp2 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(16,0
 
 gridimg <- arrangeGrob(qp1, qp2, ncol=2)
 grid.draw(gridimg)
+ggsave(gridimg, file=paste(c(path,"cases",".png"), collapse = ""), width = 16, height = 8, dpi=600)
 ggsave(qp1, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 8, dpi=600)
 ggsave(qp2, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 8, dpi=600)
