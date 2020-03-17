@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/14/2020
+#Last updated 3/17/2020
 
 #Clear plot window
 graphics.off()
@@ -18,7 +18,8 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Austria"
+country <- "US"
+state <- "North Carolina"
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"), col_types = cols())
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"), col_types = cols())
@@ -42,12 +43,23 @@ cases_us2 <- case %>%
 
 cases <- c(cases_us1, cases_us2)
 
+if (state != "") {
+  cases_other <- case %>%
+    mutate_all(~replace(., is.na(.), 0)) %>%
+    dplyr::filter(`Country/Region` == country) %>%
+    dplyr::filter(`Province/State` == state) %>%
+    select(52:ncol(case)) %>%
+    colSums()
+country <- state
+} else {
+
 #Select data for other countries
 cases_other <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
   dplyr::filter(`Country/Region` == country) %>%
   select(5:ncol(case)) %>%
   colSums()
+}
 
 #plot(cases)
 
