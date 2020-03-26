@@ -17,12 +17,13 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Select country
 country <- "Italy"
 
 
-#case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"), col_types = cols())
-#case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"), col_types = cols())
-case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"), col_types = cols())
+#case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
+#case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"), col_types = cols())
+case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"), col_types = cols())
 
 cases_us1 <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
@@ -35,7 +36,7 @@ cases_us1 <- case %>%
 cases_us2 <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
   dplyr::filter(`Country/Region` == "US") %>%
-  dplyr::filter(`Province/State` %in% state.name) %>%
+  #dplyr::filter(`Province/State` %in% state.name) %>%
   select(53:ncol(case)) %>%
   colSums()
 
@@ -90,7 +91,7 @@ psize <- 9
 lsize <- 3
 
 #Predictions
-tdays <- 60 #Last day
+tdays <- 65 #Last day
 tdate <- pdata [1,1] + tdays
   
 predcases <- trunc(fModel(tdays, a=qa, b=qb, c=qc))
@@ -110,8 +111,8 @@ qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"              
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=1, margin=margin(16,0,0,0)))
 qp1 <- qp1 + expand_limits(x=c(0,tdays))
 qp1 <- qp1 + scale_x_continuous(breaks=NULL)
-qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
-qp1 <- qp1 + annotate("text", label = paste(c(predcases," -"), collapse = ""), x = tdays-7, y = predcases, size=fsize*0.25)
+qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6))
+qp1 <- qp1 + annotate("text", label = paste(c(predcases," -"), collapse = ""), x = tdays-10, y = predcases, size=fsize*0.25)
 
 
 # qp2 <- ggplot(odata, aes(x=date, y=cases))
