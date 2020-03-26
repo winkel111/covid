@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/17/2020
+#Last updated 3/26/2020
 
 #Clear plot window
 graphics.off()
@@ -59,6 +59,7 @@ country <- state
 cases_other <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
   dplyr::filter(`Country/Region` == country) %>%
+  dplyr::filter(str_detect(`Country/Region`, state)) %>%
   select(5:ncol(case)) %>%
   colSums()
 }
