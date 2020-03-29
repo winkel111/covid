@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/26/2020
+#Last updated 3/29/2020
 
 #Clear plot window
 graphics.off()
@@ -19,6 +19,7 @@ setwd(path)
 
 #Select country
 country <- "Italy"
+
 
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
@@ -70,7 +71,7 @@ X <- as.numeric(rownames(pdata))
 Y <- pdata[,2]
 sdata <- cbind.data.frame(X,Y)
 
-modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = sdata, start = list(a = 0.003, b = 0.33, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = na.omit(sdata[64:ncol(case),]), start = list(a = 0.003, b = 0.33, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
 
 qM <- summary(modelfit)
 print(qM)
@@ -94,9 +95,9 @@ psize <- 9
 lsize <- 3
 
 #Predictions
-tdays <- 65 #Last day
 tdate <- pdata [1,1] + tdays
-  
+tdays <- 70 #Last day
+
 predcases <- trunc(fModel(tdays, a=qa, b=qb, c=qc))
 
 qp1 <- ggplot(sdata, aes(x=X, y=Y))
