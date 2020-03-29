@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/17/2020
+#Last updated 3/26/2020
 
 #Clear plot window
 graphics.off()
@@ -25,6 +25,7 @@ country <- "Italy"
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"), col_types = cols())
 case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"), col_types = cols())
 
+#Fix data for US
 cases_us1 <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
   dplyr::filter(`Country/Region` == "US") %>%
@@ -36,6 +37,8 @@ cases_us1 <- case %>%
 cases_us2 <- case %>%
   mutate_all(~replace(., is.na(.), 0)) %>%
   dplyr::filter(`Country/Region` == "US") %>%
+  dplyr::filter(`Province/State` != "Diamond Princess") %>%
+  dplyr::filter(`Province/State` != "Grand Princess") %>%
   #dplyr::filter(`Province/State` %in% state.name) %>%
   select(53:ncol(case)) %>%
   colSums()

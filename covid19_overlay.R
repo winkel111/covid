@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/17/2020
+#Last updated 3/27/2020
 
 #Clear plot window
 graphics.off()
@@ -130,7 +130,7 @@ qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qpa, b=qpb, c=qpc), siz
 qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qoa, b=qob, c=qoc), size=lsize, color="firebrick")
 qp1 <- qp1 + labs(color="Country")
 qp1 <- qp1 + theme_bw(base_size = fsize) + theme(legend.position="bottom")#+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-qp1 <- qp1 + scale_y_continuous(sec.axis = sec_axis(~., name=paste("Number of cases in",country)))
+qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = sec_axis(~., name=paste("Number of cases in",country)))
 #qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
 qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(paste(c("Extrapolation to ", format(tdate, format = "%m/%d/%y")), collapse="")) #+ scale_y_log10()
