@@ -76,7 +76,7 @@ X <- as.numeric(rownames(pdata))
 Y <- pdata[,2]
 sdata <- cbind.data.frame(X,Y)
 
-lmodel <- lm(formula = Y ~ X,  data = na.omit(sdata[64:ncol(casus),]))
+lmodel <- lm(formula = Y ~ X,  data = na.omit(sdata[64:nrow(sdata),]))
 
 qM <- summary(lmodel)
 print(qM)
@@ -94,7 +94,7 @@ lsize <- 2
 qp1 <- ggplot(pdata, aes(x=date, y=cases))
 qp1 <- qp1 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp1 <- qp1 + geom_point(color="blue", size=psize)
-qp1 <- qp1 + stat_smooth(data=subset(pdata, date >= "2020-03-25"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
+qp1 <- qp1 + stat_smooth(data=subset(pdata, date >= "2020-03-26"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp1 <- qp1 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
 #qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qa, b=qb, c=qc), size=lsize, color="firebrick")
 qp1 <- qp1 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # + scale_y_log10()
