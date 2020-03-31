@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/29/2020
+#Last updated 3/30/2020
 
 #Clear plot window
 graphics.off()
@@ -85,8 +85,8 @@ Xo <- as.numeric(rownames(odata))
 Yo <- odata[,2]
 sodata <- cbind.data.frame(Xo,Yo)
 
-modelfitp <- nls2(formula = Yp ~ I(a*exp(b*(Xp-c))),  data = na.omit(spdata[64:ncol(case),]), start = list(a = 0.003, b = 0.33, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
-modelfito <- nls2(formula = Yo ~ I(a*exp(b*(Xo-c))),  data = na.omit(sodata[64:ncol(case),]), start = list(a = 0.003, b = 0.33, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfitp <- nls2(formula = Yp ~ I(a*exp(b*(Xp-c))),  data = na.omit(spdata[64:ncol(case),]), start = list(a = 0.013, b = 0.15, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfito <- nls2(formula = Yo ~ I(a*exp(b*(Xo-c))),  data = na.omit(sodata[64:ncol(case),]), start = list(a = 0.013, b = 0.15, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
 
 qp <- summary(modelfitp)
 print(qp)
