@@ -117,7 +117,7 @@ psize <- 5
 lsize <- 2
 
 #Predictions
-tdays <- 70 #Last day
+tdays <- 77 #Last day
 tdate <- pdata [1,1] + tdays
 
 predcasesp <- trunc(fModel(tdays, a=qpa, b=qpb, c=qpc))
