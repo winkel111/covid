@@ -8,7 +8,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 3/30/2020
+#Last updated 4/1/2020
 
 #Clear plot window
 graphics.off()
@@ -101,8 +101,8 @@ qp1 <- qp1 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # +
 qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6))
 qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
-qp1 <- qp1 + ylab(expression("Number of cases in the US"))
-qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"    Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
+qp1 <- qp1 + ylab(expression("US cases"))
+qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"  Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(16,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
@@ -114,8 +114,8 @@ qp2 <- qp2 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # +
 qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6))
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
-qp2 <- qp2 + ylab(paste("Number of cases in",country))
-qp2 <- qp2 + labs(caption=paste("Last update:",tail(odata[,1],1),"    Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
+qp2 <- qp2 + ylab(paste("Cases in",country))
+qp2 <- qp2 + labs(caption=paste("Last update:",tail(odata[,1],1),"  Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
 qp2 <- qp2 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(16,0,0,0)))
 
 gridimg <- arrangeGrob(qp1, qp2, ncol=2)
