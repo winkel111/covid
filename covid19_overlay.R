@@ -79,8 +79,8 @@ Xo <- as.numeric(rownames(odata))
 Yo <- odata[,2]
 sodata <- cbind.data.frame(Xo,Yo)
 
-modelfitp <- nls2(formula = Yp ~ I(a*exp(b*(Xp-c))),  data = na.omit(spdata[64:ncol(case),]), start = list(a = 0.013, b = 0.15, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
-modelfito <- nls2(formula = Yo ~ I(a*exp(b*(Xo-c))),  data = na.omit(sodata[64:ncol(case),]), start = list(a = 0.013, b = 0.15, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfitp <- nls2(formula = Yp ~ I(a*exp(b*(Xp-c))),  data = na.omit(spdata[54:ncol(case),]), start = list(a = 0.014, b = 0.16, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfito <- nls2(formula = Yo ~ I(a*exp(b*(Xo-c))),  data = na.omit(sodata[54:ncol(case),]), start = list(a = 0.014, b = 0.16, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
 
 qp <- summary(modelfitp)
 print(qp)

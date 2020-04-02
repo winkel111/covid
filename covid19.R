@@ -18,7 +18,7 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Austria"
+country <- "Italy"
 state <- ""
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
@@ -76,10 +76,13 @@ X <- as.numeric(rownames(pdata))
 Y <- pdata[,2]
 sdata <- cbind.data.frame(X,Y)
 
-lmodel <- lm(formula = Y ~ X,  data = na.omit(sdata[68:nrow(sdata),]))
+lmodelp <- lm(formula = Y ~ X,  data = na.omit(sdata[67:nrow(sdata),]))
+lmodelo <- lm(formula = Y ~ X,  data = na.omit(odata[67:nrow(odata),]))
 
-qM <- summary(lmodel)
-print(qM)
+qMp <- summary(lmodelp)
+qMo <- summary(lmodelo)
+print(qMp)
+print(qMo)
 
 #Plot the data
 fsize <- 24
@@ -108,7 +111,7 @@ qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(16,0
 qp2 <- ggplot(odata, aes(x=date, y=cases))
 qp2 <- qp2 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp2 <- qp2 + geom_point(color="firebrick", size=psize)
-#qp2 <- qp2 + stat_smooth(data=subset(pdata, date >= "2020-03-20"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
+qp2 <- qp2 + stat_smooth(data=subset(odata, date >= "2020-03-28"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)#qp2 <- qp2 + stat_smooth(data=subset(pdata, date >= "2020-03-20"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp2 <- qp2 + xlim(min(pdata$date),max(pdata$date))
 qp2 <- qp2 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # + scale_y_log10()
 qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6))
