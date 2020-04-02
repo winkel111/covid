@@ -3,6 +3,7 @@ library(tidyverse)
 library(ggplot2)
 library(grid)
 library(gridExtra)
+library(scales)
 library(nls2)
 library(nlstools) #Tools for Nonlinear Regression Analysis
 
@@ -125,7 +126,7 @@ qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qoa, b=qob, c=qoc), siz
 qp1 <- qp1 + labs(color="Country")
 qp1 <- qp1 + theme_bw(base_size = fsize) + theme(legend.position="bottom")#+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 # qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
-qp1 <- qp1 + scale_y_continuous(sec.axis = sec_axis(~., name=paste("Cases in",country)))
+qp1 <- qp1 + scale_y_continuous(labels=comma, sec.axis = sec_axis(~., name=paste("Cases in",country), labels=comma))
 qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(paste(c("Extrapolation to ", format(tdate, format = "%m/%d/%y")), collapse="")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
