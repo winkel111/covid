@@ -19,7 +19,7 @@ setwd(path)
 
 #Select country
 country <- "Italy"
-
+state <- ""
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"), col_types = cols())
@@ -76,7 +76,7 @@ X <- as.numeric(rownames(pdata))
 Y <- pdata[,2]
 sdata <- cbind.data.frame(X,Y)
 
-modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = na.omit(sdata[62:ncol(case),]), start = list(a = 0.013, b = 0.15, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = na.omit(sdata[54:ncol(case),]), start = list(a = 0.014, b = 0.16, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
 
 qM <- summary(modelfit)
 print(qM)
@@ -100,8 +100,8 @@ psize <- 9
 lsize <- 3
 
 #Predictions
-tdate <- pdata [1,1] + tdays
 tdays <- 77 #Last day
+tdate <- pdata [1,1] + tdays
 
 predcases <- trunc(fModel(tdays, a=qa, b=qb, c=qc))
 
