@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 4/1/2020
+#Last updated 4/2/2020
 
 #Clear plot window
 graphics.off()
@@ -112,7 +112,7 @@ psize <- 5
 lsize <- 2
 
 #Predictions
-tdays <- 77 #Last day
+tdays <- 74 #Last day
 tdate <- pdata [1,1] + tdays
 
 predcasesp <- trunc(fModel(tdays, a=qpa, b=qpb, c=qpc))
@@ -126,7 +126,7 @@ qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qoa, b=qob, c=qoc), siz
 qp1 <- qp1 + labs(color="Country")
 qp1 <- qp1 + theme_bw(base_size = fsize) + theme(legend.position="bottom")#+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 # qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
-qp1 <- qp1 + scale_y_continuous(labels=comma, sec.axis = sec_axis(~., name=paste("Cases in",country), labels=comma))
+qp1 <- qp1 + scale_y_continuous(breaks = pretty_breaks(n = 6), labels=comma, sec.axis = sec_axis(~., name=paste("Cases in",country), breaks = pretty_breaks(n = 6), labels=comma))
 qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(paste(c("Extrapolation to ", format(tdate, format = "%m/%d/%y")), collapse="")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
