@@ -121,7 +121,7 @@ qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"              
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=1, margin=margin(16,0,0,0)))
 qp1 <- qp1 + expand_limits(x=c(0,tdays))
 qp1 <- qp1 + scale_x_continuous(breaks=NULL)
-qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6), labels = comma)
+qp1 <- qp1 + scale_y_continuous(breaks = pretty_breaks(n = 6), labels = comma)
 qp1 <- qp1 + annotate("text", label = paste(c(predcases," -"), collapse = ""), x = tdays-12, y = predcases, size=fsize*0.25)
 
 

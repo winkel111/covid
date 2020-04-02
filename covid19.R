@@ -19,7 +19,7 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Italy"
+country <- "Austria"
 state <- ""
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
@@ -73,16 +73,23 @@ odata$date <- as.Date(odata$date, format = "%m/%d/%y")
 
 
 #Model fit
-X <- as.numeric(rownames(pdata))
-Y <- pdata[,2]
-sdata <- cbind.data.frame(X,Y)
+Xp <- as.numeric(rownames(pdata))
+Yp <- pdata[,2]
+sdata <- cbind.data.frame(Xp,Yp)
 
-lmodelp <- lm(formula = Y ~ X,  data = na.omit(sdata[67:nrow(sdata),]))
-lmodelo <- lm(formula = Y ~ X,  data = na.omit(odata[67:nrow(odata),]))
+Xo <- as.numeric(rownames(odata))
+Yo <- odata[,2]
+sodata <- cbind.data.frame(Xo,Yo)
+
+lmodelp <- lm(formula = Yp ~ Xp,  data = na.omit(sdata[67:nrow(sdata),]))
+lmodelo <- lm(formula = Yo ~ Xo,  data = na.omit(sodata[67:nrow(sodata),]))
 
 qMp <- summary(lmodelp)
 qMo <- summary(lmodelo)
+
+print("United States:")
 print(qMp)
+print(paste(c(country,":"), collapse = ""))
 print(qMo)
 
 #Plot the data
