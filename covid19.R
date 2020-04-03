@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 4/2/2020
+#Last updated 4/3/2020
 
 #Clear plot window
 graphics.off()
@@ -81,8 +81,8 @@ Xo <- as.numeric(rownames(odata))
 Yo <- odata[,2]
 sodata <- cbind.data.frame(Xo,Yo)
 
-lmodelp <- lm(formula = Yp ~ Xp,  data = na.omit(sdata[67:nrow(sdata),]))
-lmodelo <- lm(formula = Yo ~ Xo,  data = na.omit(sodata[67:nrow(sodata),]))
+lmodelp <- lm(formula = Yp ~ Xp,  data = na.omit(sdata[68:nrow(sdata),]))
+lmodelo <- lm(formula = Yo ~ Xo,  data = na.omit(sodata[68:nrow(sodata),]))
 
 qMp <- summary(lmodelp)
 qMo <- summary(lmodelo)
@@ -91,6 +91,11 @@ print("United States:")
 print(qMp)
 print(paste(c(country,":"), collapse = ""))
 print(qMo)
+
+#Define function for plots
+fModel <- function(x, k, d) {
+  (k*x+d)
+}
 
 #Plot the data
 fsize <- 24
@@ -105,7 +110,8 @@ lsize <- 2
 qp1 <- ggplot(pdata, aes(x=date, y=cases))
 qp1 <- qp1 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp1 <- qp1 + geom_point(color="blue", size=psize)
-qp1 <- qp1 + stat_smooth(data=subset(pdata, date >= "2020-03-28"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
+qp1 <- qp1 + stat_smooth(data=subset(pdata, date >= "2020-03-29"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
+#qp1 <- qp1 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
 #qp1 <- qp1 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
 #qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qa, b=qb, c=qc), size=lsize, color="firebrick")
 qp1 <- qp1 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # + scale_y_log10()
@@ -113,13 +119,14 @@ qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = c
 qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
+#qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
 qp1 <- qp1 + labs(caption=paste("Last update:",tail(pdata[,1],1),"  Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(16,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
 qp2 <- qp2 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp2 <- qp2 + geom_point(color="firebrick", size=psize)
-qp2 <- qp2 + stat_smooth(data=subset(odata, date >= "2020-03-28"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)#qp2 <- qp2 + stat_smooth(data=subset(pdata, date >= "2020-03-20"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
+qp2 <- qp2 + stat_smooth(data=subset(odata, date >= "2020-03-29"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)#qp2 <- qp2 + stat_smooth(data=subset(pdata, date >= "2020-03-20"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp2 <- qp2 + xlim(min(pdata$date),max(pdata$date))
 qp2 <- qp2 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # + scale_y_log10()
 qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
