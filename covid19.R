@@ -19,14 +19,30 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "US"
-state <- "Kentucky"
+country <- "Italy"
+state <- ""
+
+#Population data
+population <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
 
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"), col_types = cols())
 case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"), col_types = cols())
 casus <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"), col_types = cols())
 #casus <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv"), col_types = cols())
+
+#Trim population data
+pop <- population %>%
+  mutate_all(~replace(., is.na(.), 0)) %>%
+  dplyr::filter(`Country Name` == "United States") %>%
+  dplyr::filter(`Year` == 2016)
+popp <- as.numeric(pop[1,4])
+
+pop <- population %>%
+  mutate_all(~replace(., is.na(.), 0)) %>%
+  dplyr::filter(`Country Name` == country) %>%
+  dplyr::filter(`Year` == 2016)
+popo <- as.numeric(pop[1,4])
 
 #Fix data for US
 cases <- casus %>%
@@ -105,13 +121,20 @@ fModel <- function(x, k, d) {
 }
 
 #Plot the data
-fsize <- 24
+fsize <- 20
 psize <- 5
 lsize <- 2
 
 #Start for fit
 qfp <- tail(pdata[,1],1)-3
 qfo <- tail(odata[,1],1)-3
+
+latestp <- tail(pdata[,2],1)
+latesto <- tail(odata[,2],1)
+
+#Percent penetration
+percp <- round(tail(pdata[,2],1)/popp*100,2)
+perco <- round(tail(odata[,2],1)/popo*100,2)
 
 #Function to create minor ticks
 #insert_minor <- function(major_labs, n_minor) {labs <- 
@@ -131,7 +154,7 @@ qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
 #qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
-qp1 <- qp1 + labs(caption=paste(qkp,"cases per day","\nLast update:",tail(pdata[,1],1),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
+qp1 <- qp1 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
 qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(12,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
@@ -144,7 +167,7 @@ qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = c
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
 qp2 <- qp2 + ylab(paste("Cases in",country))
-qp2 <- qp2 + labs(caption=paste(qko,"cases per day","\nLast update:",tail(odata[,1],1),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"))
+qp2 <- qp2 + labs(caption=paste(c(latesto," cases\n",perco,"% of population","\n",qko," cases per day","\nLast update:",as.character(tail(odata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
 qp2 <- qp2 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(12,0,0,0)))
 
 gridimg <- arrangeGrob(qp1, qp2, ncol=2)
