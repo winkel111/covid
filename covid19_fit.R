@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 4/2/2020
+#Last updated 4/5/2020
 
 #Clear plot window
 graphics.off()
@@ -77,7 +77,7 @@ X <- as.numeric(rownames(pdata))
 Y <- pdata[,2]
 sdata <- cbind.data.frame(X,Y)
 
-modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = na.omit(sdata[54:ncol(case),]), start = list(a = 0.014, b = 0.16, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
+modelfit <- nls2(formula = Y ~ I(a*exp(b*(X-c))),  data = na.omit(sdata[68:ncol(case),]), start = list(a = 0.014, b = 0.16, c = 1), control = nls.control(maxiter = 1000, tol = 1e-02, minFactor = 1/1024, printEval = TRUE, warnOnly = TRUE), algorithm = "port")
 
 qM <- summary(modelfit)
 print(qM)
