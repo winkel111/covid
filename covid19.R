@@ -19,7 +19,7 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Japan"
+country <- "South Africa"
 state <- ""
 
 #Population data
@@ -208,7 +208,7 @@ qp4 <- qp4 + scale_x_date(date_breaks = "2 weeks", date_labels = "%Y/%m/%d") # +
 qp4 <- qp4 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
 qp4 <- qp4 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp4 <- qp4 + xlab(expression("Date")) #+ scale_y_log10()
-qp4 <- qp4 + ylab(expression("Daily cases in",country))
+qp4 <- qp4 + ylab(paste("Daily cases in",country))
 #qp4 <- qp4 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
 #qp4 <- qp4 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
 #qp4 <- qp4 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(12,0,0,0)))
