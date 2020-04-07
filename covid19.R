@@ -19,8 +19,8 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "South Africa"
-state <- ""
+country <- "US"
+state <- "Washington"
 
 #Population data
 population <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
@@ -129,7 +129,7 @@ fModel <- function(x, k, d) {
 }
 
 #Plot the data
-fsize <- 20
+fsize <- 22
 psize <- 5
 lsize <- 2
 
@@ -164,7 +164,7 @@ qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
 #qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
 qp1 <- qp1 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
-qp1 <- qp1 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(12,0,0,0)))
+qp1 <- qp1 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
 qp2 <- qp2 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
@@ -177,7 +177,7 @@ qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
 qp2 <- qp2 + ylab(paste("Cases in",country))
 qp2 <- qp2 + labs(caption=paste(c(latesto," cases\n",perco,"% of population","\n",qko," cases per day","\nLast update: ",as.character(tail(odata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
-qp2 <- qp2 + theme(plot.caption=element_text(size=8, hjust=0, margin=margin(12,0,0,0)))
+qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp3 <- ggplot(dpdata, aes(x=date, y=diff))
 qp3 <- qp3 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
