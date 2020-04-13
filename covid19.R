@@ -19,8 +19,8 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "US"
-state <- "Washington"
+country <- "Italy"
+state <- ""
 
 #Population data
 population <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
@@ -219,6 +219,8 @@ grid.draw(gridimg)
 gridus <- arrangeGrob(qp1, qp3, ncol=1)
 gridother <- arrangeGrob(qp2, qp4, ncol=1)
 
-ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=600)
-ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=600)
-ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=600)
+ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
+ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
+ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
+
+
