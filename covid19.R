@@ -19,7 +19,7 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Italy"
+country <- "Australia"
 state <- ""
 
 #Population data
@@ -87,7 +87,6 @@ odata <- data.frame(date = names(cases_other), cases = cases_other)
 rownames(odata) <- c()
 odata$date <- as.Date(odata$date, format = "%m/%d/%y")
 
-
 #Model fit
 Xp <- as.numeric(rownames(pdata))
 Yp <- pdata[,2]
@@ -129,7 +128,7 @@ fModel <- function(x, k, d) {
 }
 
 #Plot the data
-fsize <- 22
+fsize <- 26
 psize <- 5
 lsize <- 2
 
