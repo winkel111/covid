@@ -19,8 +19,8 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "Australia"
-state <- ""
+country <- "US"
+state <- "Kentucky"
 
 #Population data
 population <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())

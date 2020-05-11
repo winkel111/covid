@@ -15,7 +15,7 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
-for (val in c("Italy","Austria","Australia","Germany","United Kingdom","Brazil","Russia","Canada","Mexico","Spain","France","India","Japan","Sweden","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt"))
+for (val in c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt"))
 {
   #Clear plot window
   graphics.off()
