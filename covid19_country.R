@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 4/6/2020
+#Last updated 6/2/2020
 
 path <- "~/R/covid/"
 #Set working directory to current path
@@ -142,6 +142,10 @@ qfo <- tail(odata[,1],1)-3
 latestp <- tail(pdata[,2],1)
 latesto <- tail(odata[,2],1)
 
+#Latest number of new cases
+recentp <- diff(tail(pdata[,2],2))
+recento <- diff(tail(odata[,2],2))
+
 #Percent penetration
 percp <- round(tail(pdata[,2],1)/popp*100,2)
 perco <- round(tail(odata[,2],1)/popo*100,2)
@@ -164,7 +168,7 @@ qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
 #qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
-qp1 <- qp1 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
+qp1 <- qp1 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1))," - New cases: ",recentp,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
 qp1 <- qp1 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
@@ -177,7 +181,7 @@ qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = c
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
 qp2 <- qp2 + ylab(paste("Cases in",country))
-qp2 <- qp2 + labs(caption=paste(c(latesto," cases\n",perco,"% of population","\n",qko," cases per day","\nLast update: ",as.character(tail(odata[,1],1)),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
+qp2 <- qp2 + labs(caption=paste(c(latesto," cases\n",perco,"% of population","\n",qko," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ",recento,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
 qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp3 <- ggplot(dpdata, aes(x=date, y=diff))
