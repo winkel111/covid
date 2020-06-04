@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 6/2/2020
+#Last updated 6/4/2020
 
 #Clear plot window
 graphics.off()
