@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 6/2/2020
+#Last updated 6/4/2020
 
 path <- "~/R/covid/"
 #Set working directory to current path
@@ -224,9 +224,9 @@ grid.draw(gridimg)
 gridus <- arrangeGrob(qp1, qp3, ncol=1)
 gridother <- arrangeGrob(qp2, qp4, ncol=1)
 
-ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
-ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
-ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
+ggsave(gridimg, file=paste(c(path,"us_states_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
+#ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
+#ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
 }
 

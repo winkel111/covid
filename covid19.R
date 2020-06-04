@@ -224,6 +224,6 @@ gridother <- arrangeGrob(qp2, qp4, ncol=1)
 
 ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
 ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
-ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
+#ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
 
