@@ -9,7 +9,10 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 6/4/2020
+#Last updated 6/15/2020
+
+#Clear global environment
+rm(list = ls(all.names = TRUE))
 
 #Clear plot window
 graphics.off()
@@ -23,26 +26,36 @@ country <- "US"
 state <- "Kentucky"
 
 #Population data
-population <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+if (!(exists("popul"))) {
+   popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+   popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
+#Trim population data
+   pop <- popul_states %>%
+     dplyr::select('NAME','POPESTIMATE2019') %>%
+     dplyr::filter(`NAME` == "United States")
+   popp <- as.numeric(pop[1,2])
+}
 
+#Trim state population data
+if (state != "") {
+  popstate <- popul_states %>%
+   dplyr::select('NAME','POPESTIMATE2019') %>%
+   dplyr::filter(`NAME` == state)
+  popo <- as.numeric(popstate[1,2])
+} else {
+  pop <- popul %>%
+    mutate_all(~replace(., is.na(.), 0)) %>%
+    dplyr::filter(`Country Name` == country) %>%
+    dplyr::filter(`Year` == 2016)
+  popo <- as.numeric(pop[1,4])
+}
+
+#Get case data
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"), col_types = cols())
 #case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"), col_types = cols())
 case <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"), col_types = cols())
 casus <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"), col_types = cols())
 #casus <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv"), col_types = cols())
-
-#Trim population data
-pop <- population %>%
-  mutate_all(~replace(., is.na(.), 0)) %>%
-  dplyr::filter(`Country Name` == "United States") %>%
-  dplyr::filter(`Year` == 2016)
-popp <- as.numeric(pop[1,4])
-
-pop <- population %>%
-  mutate_all(~replace(., is.na(.), 0)) %>%
-  dplyr::filter(`Country Name` == country) %>%
-  dplyr::filter(`Year` == 2016)
-popo <- as.numeric(pop[1,4])
 
 #Fix data for US
 cases <- casus %>%
@@ -54,7 +67,7 @@ cases <- casus %>%
   select(12:ncol(casus)) %>%
   colSums()
 
-
+#Select data for US states
 if (state != "") {
   cases_other <- casus %>%
     mutate_all(~replace(., is.na(.), 0)) %>%
