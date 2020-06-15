@@ -264,7 +264,7 @@ qp5 <- qp5 + theme_bw(base_size = fsize-10)
 qp5 <- qp5 + geom_bar(stat="identity", fill="steelblue")
 qp5 <- qp5 + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 qp5 <- qp5 + xlab(expression("State"))
-qp5 <- qp5 + ylab(paste("% penetration"))
+qp5 <- qp5 + ylab(paste("% of population exposed"))
 
 print(qp5)
 ggsave(qp5, file=paste(c(path,"us_states_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)

@@ -13,11 +13,17 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Clear global environment
 rm(list = ls(all.names = TRUE))
+
 path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
-for (val in c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt"))
+world <- c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China")
+
+#Initialize perc_countries
+perc_countries <-c()
+
+for (val in world)
 {
   #Clear plot window
   graphics.off()
@@ -28,7 +34,8 @@ for (val in c("Italy","Austria","Australia","New Zealand","Germany","United King
   
 #Population data
 if (!(exists("popul"))) {
-  popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+  #popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+  popul <- read_csv(url("http://databank.worldbank.org/data/download/POP.csv"), col_types = cols(), skip = 3)
   popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
 
   #Trim population data
@@ -37,11 +44,11 @@ if (!(exists("popul"))) {
     dplyr::filter(`NAME` == "United States")
   popp <- as.numeric(pop[1,2])
 
-  pop <- popul %>%
+  popc <- popul %>%
+    slice(-1) %>%
     mutate_all(~replace(., is.na(.), 0)) %>%
-    dplyr::filter(`Country Name` == country) %>%
-    dplyr::filter(`Year` == 2016)
-  popo <- as.numeric(pop[1,4])
+    dplyr::filter(`Economy` == country)
+  popo <- as.numeric((gsub(",", "", popc[1,5])))*1000
 }
 
 #Get case data
@@ -155,6 +162,7 @@ recento <- diff(tail(odata[,2],2))
 #Percent penetration
 percp <- round(tail(pdata[,2],1)/popp*100,2)
 perco <- round(tail(odata[,2],1)/popo*100,2)
+perc_countries <- c(perc_countries, perco)
 
 #Function to create minor ticks
 #insert_minor <- function(major_labs, n_minor) {labs <- 
@@ -235,4 +243,24 @@ ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), w
 #ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
 }
+
+#Add US to list
+world <- c(world, "United States")
+perc_countries <- c(perc_countries, percp)
+
+#Plot penetration
+df <- data.frame(world,perc_countries)
+pen <- df[order(-perc_countries),]
+pen$world <- factor(pen$world, levels = pen$world)
+
+#Plot bar graph
+qp5 <- ggplot(data=pen, aes(x=world, y=perc_countries))
+qp5 <- qp5 + theme_bw(base_size = fsize-10)
+qp5 <- qp5 + geom_bar(stat="identity", fill="forestgreen")
+qp5 <- qp5 + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+qp5 <- qp5 + xlab(expression("Country"))
+qp5 <- qp5 + ylab(paste("% of population exposed"))
+
+print(qp5)
+ggsave(qp5, file=paste(c(path,"countries_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
 
