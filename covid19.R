@@ -22,12 +22,13 @@ path <- "~/R/covid/"
 setwd(path)
 
 #Select country
-country <- "US"
-state <- "Kentucky"
+country <- "Austria"
+state <- ""
 
 #Population data
 if (!(exists("popul"))) {
-   popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+   #popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
+   popul <- read_csv(url("http://databank.worldbank.org/data/download/POP.csv"), col_types = cols(), skip = 3)
    popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
 #Trim population data
    pop <- popul_states %>%
@@ -43,11 +44,17 @@ if (state != "") {
    dplyr::filter(`NAME` == state)
   popo <- as.numeric(popstate[1,2])
 } else {
-  pop <- popul %>%
+  popc <- popul %>%
+    slice(-1) %>%
     mutate_all(~replace(., is.na(.), 0)) %>%
-    dplyr::filter(`Country Name` == country) %>%
-    dplyr::filter(`Year` == 2016)
-  popo <- as.numeric(pop[1,4])
+    dplyr::filter(`Economy` == country)
+  popo <- as.numeric((gsub(",", "", popc[1,5])))*1000
+  
+  #pop <- popul %>%
+    #mutate_all(~replace(., is.na(.), 0)) %>%
+    #dplyr::filter(`Country Name` == country) %>%
+    #dplyr::filter(`Year` == 2016)
+  #popo <- as.numeric(pop[1,4])
 }
 
 #Get case data
