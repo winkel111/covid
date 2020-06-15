@@ -17,6 +17,10 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Initialize perc_states
+perc_states <-c()
+
+#Loop through states
 for (val in state.name)
 {
   #Clear plot window
@@ -167,6 +171,7 @@ recento <- diff(tail(odata[,2],2))
 #Percent penetration
 percp <- round(tail(pdata[,2],1)/popp*100,2)
 perco <- round(tail(odata[,2],1)/popo*100,2)
+perc_states <- c(perc_states, perco)
 
 #Function to create minor ticks
 #insert_minor <- function(major_labs, n_minor) {labs <- 
@@ -247,4 +252,20 @@ ggsave(gridimg, file=paste(c(path,"us_states_",country,".png"), collapse = ""), 
 #ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
 }
+
+#Plot penetration
+df <- data.frame(state.name,perc_states)
+pen <- df[order(-perc_states),]
+pen$state.name <- factor(pen$state.name, levels = pen$state.name)
+
+#Plot bar graph
+qp5 <- ggplot(data=pen, aes(x=state.name, y=perc_states))
+qp5 <- qp5 + theme_bw(base_size = fsize-10)
+qp5 <- qp5 + geom_bar(stat="identity", fill="steelblue")
+qp5 <- qp5 + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+qp5 <- qp5 + xlab(expression("State"))
+qp5 <- qp5 + ylab(paste("% penetration"))
+
+print(qp5)
+ggsave(qp5, file=paste(c(path,"us_states_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
 
