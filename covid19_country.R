@@ -18,7 +18,7 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
-world <- c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China")
+world <- c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Chile","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China","Vietnam","Cambodia", "Romania","Lybia", "Panama")
 
 #Initialize perc_countries
 perc_countries <-c()
@@ -35,7 +35,8 @@ for (val in world)
 #Population data
 if (!(exists("popul"))) {
   #popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
-  popul <- read_csv(url("http://databank.worldbank.org/data/download/POP.csv"), col_types = cols(), skip = 3)
+  #popul <- read_csv(url("http://databank.worldbank.org/data/download/POP.csv"), col_types = cols(), skip = 3)
+  popul <- read_csv(paste(c(path,"POP",".csv"), collapse = ""), col_types = cols(), skip = 3)
   popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
 
   #Trim population data
