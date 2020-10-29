@@ -258,10 +258,15 @@ pen$world <- factor(pen$world, levels = pen$world)
 qp5 <- ggplot(data=pen, aes(x=world, y=perc_countries))
 qp5 <- qp5 + theme_bw(base_size = fsize-10)
 qp5 <- qp5 + geom_bar(stat="identity", fill="forestgreen")
+qp5 <- qp5 + geom_text(aes(label=perc_countries), size = 4, angle = 45, hjust = -.1, vjust = -0.5)
 qp5 <- qp5 + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#qp5 <- qp5 + scale_y_continuous(trans = pseudo_log_trans(base = 10))
+#qp5 <- qp5 + scale_y_log10(limits = c(0.01,max(perc_countries)))
+#qp5 <- qp5 + ylim(0.0, max(perc_countries)*1.1)
+qp5 <- qp5 + scale_y_continuous(expand = c(0,0), limits = c(0.0, max(perc_countries)*1.15))
 qp5 <- qp5 + xlab(expression("Country"))
 qp5 <- qp5 + ylab(paste("% of population exposed"))
-
 print(qp5)
+
 ggsave(qp5, file=paste(c(path,"countries_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
 
