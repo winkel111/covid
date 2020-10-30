@@ -18,3 +18,8 @@ Thumbs.db
 *.tiff
 
 
+# R files
+.RData
+.Rhistory
+
+
