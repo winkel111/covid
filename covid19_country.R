@@ -18,7 +18,7 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
-world <- c("Italy","Austria","Australia","New Zealand","Germany","United Kingdom","Brazil","Chile","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China","Vietnam","Cambodia", "Romania","Lybia", "Panama")
+world <- c("Italy","Austria","Slovakia","Australia","New Zealand","Germany","United Kingdom","Brazil","Chile","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China","Vietnam","Cambodia","Romania","Libya","Panama")
 
 #Initialize perc_countries
 perc_countries <-c()
@@ -39,18 +39,20 @@ if (!(exists("popul"))) {
   popul <- read_csv(paste(c(path,"POP",".csv"), collapse = ""), col_types = cols(), skip = 3)
   popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
 
-  #Trim population data
+  #Trim population data (US)
   pop <- popul_states %>%
     dplyr::select('NAME','POPESTIMATE2019') %>%
     dplyr::filter(`NAME` == "United States")
   popp <- as.numeric(pop[1,2])
-
+}
+  
+  #Trim population data (world)
   popc <- popul %>%
     slice(-1) %>%
     mutate_all(~replace(., is.na(.), 0)) %>%
     dplyr::filter(`Economy` == country)
   popo <- as.numeric((gsub(",", "", popc[1,5])))*1000
-}
+
 
 #Get case data
 if (!(exists("case"))) {
@@ -183,7 +185,7 @@ qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
 qp1 <- qp1 + ylab(expression("US cases"))
 #qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
-qp1 <- qp1 + labs(caption=paste(c(latestp," cases\n",percp,"% of population","\n",qkp," cases per day","\nLast update: ",as.character(tail(pdata[,1],1))," - New cases: ",recentp,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
+qp1 <- qp1 + labs(caption=paste(c(comma(latestp)," cases\n", percp,"% of population (",round(popp/1000000,1)," M)\n", comma(qkp)," cases per day","\nLast update: ",as.character(tail(pdata[,1],1))," - New cases: ", comma(recentp),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
 qp1 <- qp1 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp2 <- ggplot(odata, aes(x=date, y=cases))
@@ -196,7 +198,7 @@ qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = c
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
 qp2 <- qp2 + ylab(paste("Cases in",country))
-qp2 <- qp2 + labs(caption=paste(c(latesto," cases\n",perco,"% of population","\n",qko," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ",recento,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
+qp2 <- qp2 + labs(caption=paste(c(comma(latesto)," cases\n",perco,"% of population (",round(popo/1000000,1)," M)\n", comma(qko)," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ", comma(recento),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
 qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 qp3 <- ggplot(dpdata, aes(x=date, y=diff))
