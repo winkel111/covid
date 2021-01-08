@@ -9,7 +9,7 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Plot current COVID-19 cases in US and other countries
 #(c) Alexander Johs
-#Last updated 6/15/2020
+#Last updated 11/18/2020
 
 #Clear global environment
 rm(list = ls(all.names = TRUE))
@@ -132,7 +132,7 @@ if (!(exists("casus"))) {
    qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
    qp1 <- qp1 + ylab(expression("US cases"))
    #qp1 <- qp1 + expand_limits(x=c(pdata[1,1], as.Date("2020-04-08")))
-   qp1 <- qp1 + labs(caption=paste(c(formatC(latestp, format="f", big.mark = ",", digits=0)," cases\n",percp,"% of population (",round(popp/1000000,1)," M)","\n",formatC(qkp, format="f", big.mark = ",", digits=0)," cases per day","\nLast update: ",as.character(tail(pdata[,1],1))," - New cases: ",recentp,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
+   qp1 <- qp1 + labs(caption=paste(c(formatC(latestp, format="f", big.mark = ",", digits=0)," cases\n",percp,"% of population (",round(popp/1000000,1)," M)","\n",formatC(qkp, format="f", big.mark = ",", digits=0)," cases per day","\nLast update: ",as.character(tail(pdata[,1],1))," - New cases: ", comma(recentp),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"), collapse = ""))
    qp1 <- qp1 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
    
    #Plot daily cases in US
@@ -221,7 +221,7 @@ qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = c
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
 qp2 <- qp2 + ylab(paste("Cases in",country))
-qp2 <- qp2 + labs(caption=paste(c(formatC(latesto, format="f", big.mark = ",", digits=0)," cases\n",perco,"% of population (",round(popo/1000000,1)," M)","\n",formatC(qko, format="f", big.mark = ",", digits=0)," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ",recento,"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
+qp2 <- qp2 + labs(caption=paste(c(formatC(latesto, format="f", big.mark = ",", digits=0)," cases\n",perco,"% of population (",round(popo/1000000,1)," M)","\n",formatC(qko, format="f", big.mark = ",", digits=0)," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ", comma(recento),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
 qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
 #Plot daily cases in states
