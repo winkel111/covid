@@ -13,7 +13,10 @@ library(nlstools) #Tools for Nonlinear Regression Analysis
 
 #Clear global environment
 rm(list = ls(all.names = TRUE))
+
+#Set path
 path <- "~/R/covid/"
+
 #Set working directory to current path
 setwd(path)
 
