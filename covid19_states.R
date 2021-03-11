@@ -17,6 +17,9 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Function to calculate moving average
+ma <- function(x, n = 9){stats::filter(x, rep(1 / n, n), sides = 2)}
+
 #Initialize perc_states
 perc_states <-c()
 
@@ -90,8 +93,9 @@ if (!(exists("casus"))) {
    
    #Calculate differences
    dsp <- spdata %>% mutate(Diff = Yp - lag(Yp))
-   dpdata <- data.frame(pdata[,1],dsp[,3])
-   names(dpdata) <- c("date","diff")
+   dspmavg <- as.vector(ma(dsp[,3]))
+   dpdata <- data.frame(pdata[,1],dsp[,3],dspmavg)
+   names(dpdata) <- c("date","diff","dspmavg")
    
    #Linear model fit over the 4 most recent days
    fstartp <- nrow(spdata)-3
@@ -139,7 +143,8 @@ if (!(exists("casus"))) {
    qp3 <- ggplot(dpdata, aes(x=date, y=diff))
    qp3 <- qp3 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
    qp3 <- qp3 + geom_point(color="gray60", size=psize)
-   qp3 <- qp3 + geom_smooth(color="red", method="gam", fill="pink", size=lsize)
+   qp3 <- qp3 + geom_line(aes(x=date, y=dspmavg), color="red", fill="pink", size=lsize)
+   #qp3 <- qp3 + geom_smooth(color="red", method="gam", fill="pink", size=lsize)
    #qp3 <- qp3 + stat_smooth(data=subset(pdata, date >= qfp),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
    #qp3 <- qp3 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
    #qp3 <- qp3 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
@@ -176,8 +181,9 @@ sodata <- cbind.data.frame(Xo,Yo)
 
 #Calculate differences
 dso <- sodata %>% mutate(Diff = Yo - lag(Yo))
-dodata <- data.frame(odata[,1],dso[,3])
-names(dodata) <- c("date","diff")
+dsomavg <- as.vector(ma(dso[,3]))
+dodata <- data.frame(odata[,1],dso[,3],dsomavg)
+names(dodata) <- c("date","diff","dsomavg")
 
 #Linear model fit over the 4 most recent days
 fstarto <- nrow(sodata)-3
@@ -224,11 +230,13 @@ qp2 <- qp2 + ylab(paste("Cases in",country))
 qp2 <- qp2 + labs(caption=paste(c(formatC(latesto, format="f", big.mark = ",", digits=0)," cases\n",perco,"% of population (",round(popo/1000000,1)," M)","\n",formatC(qko, format="f", big.mark = ",", digits=0)," cases per day","\nLast update: ",as.character(tail(odata[,1],1))," - New cases: ", comma(recento),"\nData source: Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)"),collapse = ""))
 qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margin(12,0,0,0)))
 
+
 #Plot daily cases in states
 qp4 <- ggplot(dodata, aes(x=date, y=diff))
 qp4 <- qp4 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp4 <- qp4 + geom_point(color="gray60", size=psize)
-qp4 <- qp4 + geom_smooth(color="blue", method="gam", fill="lightsteelblue", size=lsize)
+qp4 <- qp4 + geom_line(aes(x=date, y=dsomavg), color="blue", fill="lightsteelblue", size=lsize)
+#qp4 <- qp4 + geom_smooth(aes(x=date, y=mavg), color="blue", method="auto", fill="lightsteelblue", size=lsize)
 #qp4 <- qp4 + stat_smooth(data=subset(pdata, date >= qfp),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp4 <- qp4 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
 #qp4 <- qp4 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)

@@ -18,6 +18,10 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Function to calculate moving average
+ma <- function(x, n = 9){stats::filter(x, rep(1 / n, n), sides = 2)}
+
+#List of countries
 world <- c("Italy","Austria","Slovakia","Australia","New Zealand","Germany","United Kingdom","Brazil","Chile","Russia","Ukraine","Canada","Mexico","Spain","France","India","Japan","Sweden","Norway","Argentina","Greece","Turkey","Hungary","Switzerland","South Africa","Thailand","Egypt","China","Vietnam","Cambodia","Romania","Libya","Panama")
 
 #Initialize perc_countries
@@ -117,10 +121,12 @@ sodata <- cbind.data.frame(Xo,Yo)
 #Calculate differences
 dsp <- spdata %>% mutate(Diff = Yp - lag(Yp))
 dso <- sodata %>% mutate(Diff = Yo - lag(Yo))
-dpdata <- data.frame(pdata[,1],dsp[,3])
-dodata <- data.frame(odata[,1],dso[,3])
-names(dpdata) <- c("date","diff")
-names(dodata) <- c("date","diff")
+dspmavg <- as.vector(ma(dsp[,3]))
+dsomavg <- as.vector(ma(dso[,3]))
+dpdata <- data.frame(pdata[,1],dsp[,3],dspmavg)
+dodata <- data.frame(odata[,1],dso[,3],dsomavg)
+names(dpdata) <- c("date","diff","dspmavg")
+names(dodata) <- c("date","diff","dsomavg")
 
 #Linear model fit over the 4 most recent days
 fstartp <- nrow(spdata)-3
@@ -204,7 +210,8 @@ qp2 <- qp2 + theme(plot.caption=element_text(size=fsize/2, hjust=0, margin=margi
 qp3 <- ggplot(dpdata, aes(x=date, y=diff))
 qp3 <- qp3 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp3 <- qp3 + geom_point(color="gray60", size=psize)
-qp3 <- qp3 + geom_smooth(color="red", method="gam", fill="pink", size=lsize)
+qp3 <- qp3 + geom_line(aes(x=date, y=dspmavg), color="red", fill="pink", size=lsize)
+#qp3 <- qp3 + geom_smooth(color="red", method="gam", fill="pink", size=lsize)
 #qp3 <- qp3 + stat_smooth(data=subset(pdata, date >= qfp),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp3 <- qp3 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
 #qp3 <- qp3 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
@@ -221,7 +228,8 @@ qp3 <- qp3 + ylab(expression("US daily cases"))
 qp4 <- ggplot(dodata, aes(x=date, y=diff))
 qp4 <- qp4 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 qp4 <- qp4 + geom_point(color="gray60", size=psize)
-qp4 <- qp4 + geom_smooth(color="blue", method="gam", fill="lightsteelblue", size=lsize)
+qp4 <- qp4 + geom_line(aes(x=date, y=dsomavg), color="blue", fill="lightsteelblue", size=lsize)
+#qp4 <- qp4 + geom_smooth(color="blue", method="gam", fill="lightsteelblue", size=lsize)
 #qp4 <- qp4 + stat_smooth(data=subset(pdata, date >= qfp),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp4 <- qp4 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
 #qp4 <- qp4 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
