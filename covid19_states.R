@@ -93,8 +93,9 @@ if (!(exists("casus"))) {
    
    #Calculate differences
    dsp <- spdata %>% mutate(Diff = Yp - lag(Yp))
-   dspmavg <- as.vector(ma(dsp[,3]))
-   dpdata <- data.frame(pdata[,1],dsp[,3],dspmavg)
+   dspm <- dsp %>% mutate(roll_mean = zoo::rollmean(Diff, 15, fill = NA))
+   #dspmavg <- as.vector(ma(dspm[,3]))
+   dpdata <- data.frame(pdata[,1],dsp[,3],dspm[,4])
    names(dpdata) <- c("date","diff","dspmavg")
    
    #Linear model fit over the 4 most recent days
@@ -119,7 +120,7 @@ if (!(exists("casus"))) {
    
    #Plot parameters
    fsize <- 22
-   psize <- 5
+   psize <- 4
    lsize <- 2
    
    #Plot cumulative cases in US
@@ -179,10 +180,11 @@ Xo <- as.numeric(rownames(odata))
 Yo <- odata[,2]
 sodata <- cbind.data.frame(Xo,Yo)
 
-#Calculate differences
+#Calculate differences and rolling mean
 dso <- sodata %>% mutate(Diff = Yo - lag(Yo))
-dsomavg <- as.vector(ma(dso[,3]))
-dodata <- data.frame(odata[,1],dso[,3],dsomavg)
+dsom <- dso %>% mutate(roll_mean = zoo::rollmean(Diff, 15, fill = NA))
+#dsomavg <- as.vector(ma(dsom[,3]))
+dodata <- data.frame(odata[,1],dso[,3],dsom[,4])
 names(dodata) <- c("date","diff","dsomavg")
 
 #Linear model fit over the 4 most recent days
