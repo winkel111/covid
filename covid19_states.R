@@ -36,7 +36,7 @@ for (val in state.name)
 #Population data
 if (!(exists("popul_states"))) {
    #popul <- read_csv(url("https://pkgstore.datahub.io/core/population/population_csv/data/ead5be05591360d33ad1a37382f8f8b1/population_csv.csv"), col_types = cols())
-   popul_states <- read_csv(url("http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
+   popul_states <- read_csv(url("https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv"))
 
    #Get US population data
    #pop <- population_states %>%
