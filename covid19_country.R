@@ -18,6 +18,13 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Create subdirectory for output
+dpath <- paste(c(path,"cases_country/"), collapse = "")
+
+if (!dir.exists(dpath)) {
+  dir.create(dpath)
+}
+
 #Function to calculate moving average
 ma <- function(x, n = 9){stats::filter(x, rep(1 / n, n), sides = 2)}
 
@@ -249,7 +256,8 @@ grid.draw(gridimg)
 gridus <- arrangeGrob(qp1, qp3, ncol=1)
 gridother <- arrangeGrob(qp2, qp4, ncol=1)
 
-ggsave(gridimg, file=paste(c(path,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
+
+ggsave(gridimg, file=paste(c(dpath,"cases_us_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
 #ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
 #ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
@@ -278,5 +286,5 @@ qp5 <- qp5 + xlab(expression("Country"))
 qp5 <- qp5 + ylab(paste("% of population exposed"))
 print(qp5)
 
-ggsave(qp5, file=paste(c(path,"countries_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
+ggsave(qp5, file=paste(c(dpath,"countries_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
 

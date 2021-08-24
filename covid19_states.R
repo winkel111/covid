@@ -17,6 +17,17 @@ path <- "~/R/covid/"
 #Set working directory to current path
 setwd(path)
 
+#Create subdirectory for output
+dpath <- paste(c(path,"cases_us/"), collapse = "")
+
+if (!dir.exists(dpath)) {
+   dir.create(dpath)
+}
+
+
+#Plot interval
+dateint <- "3 month"
+
 #Function to calculate moving average
 ma <- function(x, n = 9){stats::filter(x, rep(1 / n, n), sides = 2)}
 
@@ -131,7 +142,7 @@ if (!(exists("casus"))) {
    #qp1 <- qp1 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
    #qp1 <- qp1 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
    #qp1 <- qp1 + stat_function(fun = function(x) fModel(x, a=qa, b=qb, c=qc), size=lsize, color="firebrick")
-   qp1 <- qp1 + scale_x_date(date_breaks = "1 month", date_labels = "%Y/%m/%d") # + scale_y_log10()
+   qp1 <- qp1 + scale_x_date(date_breaks = dateint, date_labels = "%Y/%m/%d") # + scale_y_log10()
    qp1 <- qp1 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
    qp1 <- qp1 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
    qp1 <- qp1 + xlab(expression("Date")) #+ scale_y_log10()
@@ -150,7 +161,7 @@ if (!(exists("casus"))) {
    #qp3 <- qp3 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
    #qp3 <- qp3 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
    #qp3 <- qp3 + stat_function(fun = function(x) fModel(x, a=qa, b=qb, c=qc), size=lsize, color="firebrick")
-   qp3 <- qp3 + scale_x_date(date_breaks = "1 month", date_labels = "%Y/%m/%d") # + scale_y_log10()
+   qp3 <- qp3 + scale_x_date(date_breaks = dateint, date_labels = "%Y/%m/%d") # + scale_y_log10()
    qp3 <- qp3 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
    qp3 <- qp3 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
    qp3 <- qp3 + xlab(expression("Date")) #+ scale_y_log10()
@@ -224,7 +235,7 @@ qp2 <- qp2 + theme_bw(base_size = fsize) #+ theme(panel.grid.major = element_bla
 qp2 <- qp2 + geom_point(color="gray60", size=psize)
 qp2 <- qp2 + stat_smooth(data=subset(odata, date >= qfo),method="lm", color="blue", size=lsize, se = FALSE, fill="blue", level = 0.95)#qp2 <- qp2 + stat_smooth(data=subset(pdata, date >= "2020-03-20"),method="lm", color="gray40", size=lsize, se = FALSE, level = 0.95)
 #qp2 <- qp2 + xlim(min(pdata$date),max(pdata$date))
-qp2 <- qp2 + scale_x_date(date_breaks = "1 month", date_labels = "%Y/%m/%d") # + scale_y_log10()
+qp2 <- qp2 + scale_x_date(date_breaks = dateint, date_labels = "%Y/%m/%d") # + scale_y_log10()
 qp2 <- qp2 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
 qp2 <- qp2 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp2 <- qp2 + xlab(expression("Date")) #+ scale_y_log10()
@@ -243,7 +254,7 @@ qp4 <- qp4 + geom_line(aes(x=date, y=dsomavg), color="blue", fill="lightsteelblu
 #qp4 <- qp4 + stat_function(fun = function(x) fModel(x, k=coef(lmodelp)["Xp"], d=coef(lmodelp)["(Intercept)"]), size=lsize, color="gray40")
 #qp4 <- qp4 + geom_line(data = modelfit, aes(date, y=cases), color="firebrick", size=lsize)
 #qp4 <- qp4 + stat_function(fun = function(x) fModel(x, a=qa, b=qb, c=qc), size=lsize, color="firebrick")
-qp4 <- qp4 + scale_x_date(date_breaks = "1 month", date_labels = "%Y/%m/%d") # + scale_y_log10()
+qp4 <- qp4 + scale_x_date(date_breaks = dateint, date_labels = "%Y/%m/%d") # + scale_y_log10()
 qp4 <- qp4 + scale_y_continuous(breaks = scales::pretty_breaks(n = 6),labels = comma)
 qp4 <- qp4 + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 qp4 <- qp4 + xlab(expression("Date")) #+ scale_y_log10()
@@ -258,9 +269,9 @@ grid.draw(gridimg)
 gridus <- arrangeGrob(qp1, qp3, ncol=1)
 gridother <- arrangeGrob(qp2, qp4, ncol=1)
 
-ggsave(gridimg, file=paste(c(path,"us_states_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
-#ggsave(gridus, file=paste(c(path,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
-#ggsave(gridother, file=paste(c(path,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
+ggsave(gridimg, file=paste(c(dpath,"us_states_",country,".png"), collapse = ""), width = 16, height = 12, dpi=300)
+#ggsave(gridus, file=paste(c(dpath,"cases_us",".png"), collapse = ""), width = 8, height = 12, dpi=300)
+#ggsave(gridother, file=paste(c(dpath,country,".png"), collapse = ""), width = 8, height = 12, dpi=300)
 
 }
 
@@ -279,5 +290,5 @@ qp5 <- qp5 + xlab(expression("State"))
 qp5 <- qp5 + ylab(paste("% of population exposed"))
 
 print(qp5)
-ggsave(qp5, file=paste(c(path,"us_states_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
+ggsave(qp5, file=paste(c(dpath,"us_states_penetration",".png"), collapse = ""), width = 12, height = 8, dpi=300)
 
